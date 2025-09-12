@@ -87,6 +87,9 @@ This script is used for running place and route using Cadence Innovus.
 ---
 
 ## Notes
+- Each directory contains an `empty_file_for_keep_directory` file. These files are used to preserve empty directory structures in Git repositories. Remove these files when adding actual design content.
 - Ensure that the required Cadence tools (Genus, Xcelium, and Innovus) are installed and properly configured in your environment.
 - Design libraries are not included and users should modify library paths according to their setup.
 - The scripts assume specific directory structures for source files, testbenches, and synthesis outputs. Adjust paths in the scripts if necessary.
+- Always backup your work before running automation scripts.
+- Review and customize script settings before execution to match your specific design requirements.
