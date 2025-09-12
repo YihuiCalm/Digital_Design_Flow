@@ -1,6 +1,12 @@
 # Digital Design Automation Scripts
 
-This directory contains two scripts for automating synthesis and simulation tasks using Cadence tools. 
+This repository contains automation scripts for digital design flow using Cadence EDA tools. The scripts streamline the process of simulation, synthesis, and place & route operations.
+
+## Prerequisites
+- Cadence Xcelium for simulation
+- Cadence Genus for synthesis
+- Cadence Innovus for place & route
+- Valid technology libraries and PDKs
 ## Scripts Overview
 
 ### 1. `run_sim`
@@ -82,4 +88,5 @@ This script is used for running place and route using Cadence Innovus.
 
 ## Notes
 - Ensure that the required Cadence tools (Genus, Xcelium, and Innovus) are installed and properly configured in your environment.
+- Design libraries are not included and users should modify library paths according to their setup.
 - The scripts assume specific directory structures for source files, testbenches, and synthesis outputs. Adjust paths in the scripts if necessary.
