@@ -1,0 +1,58 @@
+#!/bin/bash
+
+# a simple bash script for Cadence Genus
+
+echo "Genus Synthesis Control Script"
+
+# reset control variables
+gui=0
+topmodule=""
+newtopflag=0
+top=0
+
+# read and process input arguments
+for arg in $@
+do
+    if [ "$arg" == "-gui" ]
+    then
+	gui=1
+    elif [ $newtopflag == 1 ]
+    then
+	topmodule=$arg
+	newtopflag=0
+    elif [ "$arg" == "-top" ]
+    then
+	newtopflag=1
+        top=1
+    fi
+done
+
+echo ""
+pushd work
+
+
+if [ $gui == 1 ]
+then
+   if [ $top == 1 ]
+   then
+      genus -execute "set top_module $topmodule" -f ../scripts/synthesis.tcl -gui
+   else
+      genus -gui
+   fi
+else
+   if [ $top == 1 ]
+   then
+      genus -execute "set top_module $topmodule" -f ../scripts/synthesis.tcl 
+   else
+      genus
+   fi
+fi
+
+echo "Deleting following log files"
+find . -maxdepth 1 -type f 
+find . -maxdepth 1 -type f -exec rm -f {} \;
+
+popd
+
+
+	

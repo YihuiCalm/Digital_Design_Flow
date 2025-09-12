@@ -1,0 +1,106 @@
+#!/bin/bash
+
+# a simple bash script for Cadence Xcelcium verilog simulations
+
+echo "**********Xcelcium Simulation Control File**********"
+
+# reset control variables
+clean=0
+compile=0
+cells=0
+sim=0
+gui=0
+waveform=0
+topmodule=""
+newtopflag=0
+
+# read and process input arguments
+for arg in $@
+do
+    if [ "$arg" == "-clean" ]
+    then
+        clean=1
+    elif [ "$arg" == "-compile" ]
+    then
+        compile=1
+    elif [ "$arg" == "-sim" ]
+    then
+	    sim=1
+        compile=1
+    elif [ "$arg" == "-cells" ]
+    then
+	    cells=1
+    elif [ "$arg" == "-gui" ]
+    then
+	    gui=1
+    elif [ "$arg" == "-waveform" ]
+    then
+        waveform=1
+    elif [ $newtopflag == 1 ]
+    then
+	    topmodule=$arg
+	    newtopflag=0
+    elif [ "$arg" == "-top" ]
+    then
+	    newtopflag=1
+    fi
+done
+
+echo ""
+pushd work
+if [ $clean == 1 ]
+then
+echo "**********Cleaning up work directory**********"
+    rm -rf *
+fi
+
+# if compiling source files
+if [ $compile == 1 ]
+then
+    # remove old compile results
+    if [ $cells == 1 ]
+    then
+    echo "**********Compiling source files and standard cells, and generating sdf.cmd**********"
+        xmverilog /dept/enee/software/tsmc_65/TSMC_IP/standard_cell_65GP/tcbn65gplus_200a/FE/TSMCHOME/digital/Front_End/verilog/tcbn65gplus_200a/tcbn65gplus.v ../../synthesis/work/output/${topmodule}_syn.v -clean -compile
+        bash ../script/sdf_cmd_generate "$topmodule"
+        xmsdfc ../../synthesis/work/output/${topmodule}_syn.sdf
+    else
+        xmverilog ../../source/*.v -clean -compile
+    fi 
+fi
+
+# if simulating files
+if [ $sim == 1 ]
+then
+    echo "**********Starting simulation**********"
+    if [ $gui == 1 ]
+    then
+        if [ $cells == 1 ]
+        then
+        xmverilog ../testbench/tb_${topmodule}.v -access +rw -mess +gui	-sdf_cmd_file ../sdf/sdf.cmd -dumptiming timingdump.log -timescale 1ns/1ps
+        else
+        xmverilog ../testbench/tb_${topmodule}.v -access +rw -mess +gui -dumptiming timingdump.log -timescale 1ns/1ps
+        fi
+	# if gui
+    else
+    if [ $cells == 1 ]
+        then
+        xmverilog ../testbench/tb_${topmodule}.v -access +rw -mess	-sdf_cmd_file ../sdf/sdf.cmd -dumptiming timingdump.log -timescale 1ns/1ps
+        else
+        xmverilog ../testbench/tb_${topmodule}.v -access +rw -mess -dumptiming timingdump.log -timescale 1ns/1ps
+        fi
+    fi 
+fi   
+
+# if waveform dump
+if [ $waveform == 1 ]
+then
+    echo "**********Starting waveform viewer**********"
+    simvision tb_${topmodule}.trn
+fi
+
+popd
+
+
+
+	

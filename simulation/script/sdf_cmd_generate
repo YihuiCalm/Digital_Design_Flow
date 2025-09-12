@@ -1,0 +1,5 @@
+topmodule=$1
+echo "COMPILED_SDF_FILE = \"../../synthesis/work/output/${topmodule}_syn.sdf.X\",
+SCOPE = tb_${topmodule}.u_${topmodule},
+MTM_CONTROL = \"MAXIMUM\",
+LOG_FILE = \"${topmodule}_syn_sdf.log\";" > ../sdf/sdf.cmd

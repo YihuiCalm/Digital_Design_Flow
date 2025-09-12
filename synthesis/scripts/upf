@@ -1,0 +1,11 @@
+set_design_top $top_module
+upf_version 2.0
+create_supply_port vpwr
+create_supply_port vgnd
+create_supply_net vpwr
+create_supply_net vgnd
+connect_supply_net vpwr -ports vpwr
+connect_supply_net vgnd -ports vgnd
+create_supply_set SS_VDD -function { power vpwr } -function { ground vgnd } -function { nwell vpwr} -function { pwell vgnd }
+create_power_domain PD_VDD -include_scope -supply {primary SS_VDD}
+set_port_attributes -applies_to both -elements . -driver_supply SS_VDD -receiver_supply SS_VDD
