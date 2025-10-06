@@ -4,6 +4,20 @@
 
 echo "Innovus Plance & Route Control Script"
 
+# read cap_table, target_library and library_search_path from ../lib/lib_path
+target_library=$(grep '^target_library=' ../lib/lib_path | cut -d'=' -f2)
+library_search_path=$(grep '^library_search_path=' ../lib/lib_path | cut -d'=' -f2)
+cap_table=$(grep '^cap_table=' ../lib/lib_path | cut -d'=' -f2)
+clockBufName=$(grep '^clockBufName=' ../lib/lib_path | cut -d'=' -f2)
+fillerCells=$(grep '^fillerCells=' ../lib/lib_path | cut -d'=' -f2)
+lef=$(grep '^lef=' ../lib/lib_path | cut -d'=' -f2)
+if [ -z "$target_library" ] echo "Error: target_library not found in ../lib/lib_path." ; exit 1 ; fi
+if [ -z "$library_search_path" ] echo "Error: library_search_path not found in ../lib/lib_path." ; exit 1 ; fi
+if [ -z "$cap_table" ] echo "Error: cap_table not found in ../lib/lib_path." ; exit 1; fi
+if [ -z "$clockBufName" ] echo "Error: clockBufName not found in ../lib/lib_path." ; exit 1; fi
+if [ -z "$fillerCells" ] echo "Error: fillerCells not found in ../lib/lib_path." ; exit 1; fi
+if [ -z "$lef" ] echo "Error: lef not found in ../lib/lib_path." ; exit 1; fi
+
 # reset control variables
 gui=0
 topmodule=""
@@ -34,8 +48,8 @@ pushd work
 cat > ../scripts/Default.view <<EOF
 # Version:1.0 MMMC View Definition File
 # Do Not Remove Above Line
-create_rc_corner -name rc -cap_table {../../lib/sky130_cap.captable} -preRoute_res {1.0} -preRoute_cap {1.0} -preRoute_clkres {0.0} -preRoute_clkcap {0.0} -postRoute_res {1.0} -postRoute_cap {1.0} -postRoute_xcap {1.0} -postRoute_clkres {0.0} -postRoute_clkcap {0.0}
-create_library_set -name libSTD -timing {../../lib/scs130lp_tt_1.62_25_nldm.lib}
+create_rc_corner -name rc -cap_table {${cap_table}} -preRoute_res {1.0} -preRoute_cap {1.0} -preRoute_clkres {0.0} -preRoute_clkcap {0.0} -postRoute_res {1.0} -postRoute_cap {1.0} -postRoute_xcap {1.0} -postRoute_clkres {0.0} -postRoute_clkcap {0.0}
+create_library_set -name libSTD -timing {${library_search_path}/${target_library}.lib}
 create_constraint_mode -name Constraints -sdc_files {../../synthesis/work/output/${topmodule}_syn.sdc}
 create_delay_corner -name Delay -library_set {libSTD} -rc_corner {rc}
 create_analysis_view -name Default -constraint_mode {Constraints} -delay_corner {Delay}
@@ -46,14 +60,14 @@ if [ $gui == 1 ]
 then
    if [ $top == 1 ]
    then
-      innovus -execute "win; set BASENAME $topmodule;" -files ../scripts/top-level.tcl -log ../work/log/run.log -cmd ../work/log/run.cmd -overwrite
+      innovus -execute "win; set BASENAME $topmodule; set init_lef_file ${lef}; set fillerCells [list ${fillerCells}]; set clockBufName ${clockBufName}" -files ../scripts/top-level.tcl -log ../work/log/run.log -cmd ../work/log/run.cmd -overwrite
    else
       innovus
    fi
 else
    if [ $top == 1 ]
    then
-      innovus -execute "win; set BASENAME $topmodule;" -files ../scripts/top-level.tcl -log ../work/log/run.log -cmd ../work/log/run.cmd -overwrite -nowin
+      innovus -execute "set BASENAME $topmodule; set init_lef_file ${lef} set fillerCells [list ${fillerCells}]; set clockBufName ${clockBufName}" -files ../scripts/top-level.tcl -log ../work/log/run.log -cmd ../work/log/run.cmd -overwrite -nowin
    else
       innovus -nowin
    fi

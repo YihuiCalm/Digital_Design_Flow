@@ -6,8 +6,7 @@ setMultiCpuUsage -localCpu max
 
 # set the name of the filler cells - you don't need a list
 # if you only have one
-set fillerCells [list "design_lib_fill_1" "design_lib_fill_2" "design_lib_fill_4" "design_lib_fill_8"]
-setDoAssign on -buffer design_lib_buf_1
+# set fillerCells [list "design_lib_fill_1" "design_lib_fill_2" "design_lib_fill_4" "design_lib_fill_8"]
 
 # choose numbers that make sense for you
 set usepct 0.4;# percent utilization in placing cells
@@ -18,7 +17,7 @@ set aspect 0.7;# aspect ratio of overall cell (1.0 is square)
 #############################################################
 # You may not have to change things below this line - but check!
 #############################################################
-set clockBufName design_lib_clkbuf_1;# Footprint of inverter in .lib file
+# set clockBufName design_lib_clkbuf_1;# Footprint of inverter in .lib file
 
 # Set some values that define the power rings and stripes. 
 # use these defaults, or choose your own. 
@@ -34,8 +33,8 @@ set set_to_set_distance 3.0;
 
 set init_gnd_net vgnd
 set init_pwr_net vpwr
-set init_lef_file {../../lib/design_lib.tlef
-../../lib/design_lib.lef}
+# set init_lef_file {../../lib/design_lib.tlef
+# ../../lib/design_lib.lef}
 set init_verilog ../../synthesis/work/output/${BASENAME}_pg_syn.v
 set init_mmmc_file ../scripts/Default.view
 

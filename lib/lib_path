@@ -1,0 +1,9 @@
+# Edit this file to set the path to your technology libraries
+# These variables are used by the synthesis, PnR and simulation scripts
+target_library=
+library_search_path=
+stdcell_verilog=
+cap_table=
+fillerCells=
+clockBufName=
+lef=

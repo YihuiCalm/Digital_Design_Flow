@@ -4,9 +4,7 @@
 set_db log_file log/genus.log
 set_db cmd_file log/genus.cmd
 set_db init_hdl_search_path {../../source} 
-set_db init_lib_search_path {../../lib}
 # top_module is defined in the command line with -execute "set top_module <module_name>"
-set target_library "scs130lp_tt_1.62_25_nldm"
 
 read_libs ${target_library}.lib
 # check_library -lib_cell [get_lib_cells]

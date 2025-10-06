@@ -87,6 +87,7 @@ This script is used for running place and route using Cadence Innovus.
 ---
 
 ## Notes
+- Edit `lib/lib_path` file to fit your PDK.
 - Each directory contains an `empty_file_for_keep_directory` file. These files are used to preserve empty directory structures in Git repositories. Remove these files when adding actual design content.
 - Ensure that the required Cadence tools (Genus, Xcelium, and Innovus) are installed and properly configured in your environment.
 - Design libraries are not included and users should modify library paths according to their setup.

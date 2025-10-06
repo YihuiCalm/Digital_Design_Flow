@@ -4,10 +4,15 @@
 
 echo "**********Xcelcium Simulation Control File**********"
 
+# Read stdcell_verilog variable from ../lib/lib_path file
+stdcell_verilog=$(grep '^stdcell_verilog=' ../lib/lib_path | cut -d'=' -f2)
+if [ -z "$stdcell_verilog" ] echo "Error: stdcell_verilog not found in ../lib/lib_path." ; exit 1 ; fi
+
 # reset control variables
 clean=0
 compile=0
 cells=0
+layout=0
 sim=0
 gui=0
 waveform=0
@@ -30,6 +35,9 @@ do
     elif [ "$arg" == "-cells" ]
     then
 	    cells=1
+    elif [ "$arg" == "-layout" ]
+    then
+        layout=1
     elif [ "$arg" == "-gui" ]
     then
 	    gui=1
@@ -60,13 +68,19 @@ then
     # remove old compile results
     if [ $cells == 1 ]
     then
-    echo "**********Compiling source files and standard cells, and generating sdf.cmd**********"
-        xmverilog /dept/enee/software/tsmc_65/TSMC_IP/standard_cell_65GP/tcbn65gplus_200a/FE/TSMCHOME/digital/Front_End/verilog/tcbn65gplus_200a/tcbn65gplus.v ../../synthesis/work/output/${topmodule}_syn.v -clean -compile
-        bash ../script/sdf_cmd_generate "$topmodule"
+        echo "**********Compiling source files and standard cells, and generating sdf.cmd**********"
+        xmverilog ${stdcell_verilog} ../../synthesis/work/output/${topmodule}_syn.v -clean -compile
+        bash ../script/sdf_cmd_generate_syn "$topmodule"
         xmsdfc ../../synthesis/work/output/${topmodule}_syn.sdf
+    elif [ $layout == 1 ]
+    then
+        echo "**********Compiling source files and standard cells, and generating sdf.cmd**********"
+        xmverilog ${stdcell_verilog} ../../PnR/work/output/${topmodule}_pnr.v -clean -compile
+        bash ../script/sdf_cmd_generate_pnr "$topmodule"
+        xmsdfc ../../PnR/work/output/${topmodule}_pnr.sdf
     else
-        xmverilog ../../source/*.v -clean -compile
-    fi 
+        xmverilog ${stdcell_verilog} ../../source/*.v -clean -compile
+    fi  
 fi
 
 # if simulating files
@@ -75,15 +89,15 @@ then
     echo "**********Starting simulation**********"
     if [ $gui == 1 ]
     then
-        if [ $cells == 1 ]
+        if [ $cells == 1 ] || [ $layout == 1 ]
         then
-        xmverilog ../testbench/tb_${topmodule}.v -access +rw -mess +gui	-sdf_cmd_file ../sdf/sdf.cmd -dumptiming timingdump.log -timescale 1ns/1ps
+            xmverilog ../testbench/tb_${topmodule}.v -access +rw -mess +gui	-sdf_cmd_file ../sdf/sdf.cmd -dumptiming timingdump.log -timescale 1ns/1ps
         else
-        xmverilog ../testbench/tb_${topmodule}.v -access +rw -mess +gui -dumptiming timingdump.log -timescale 1ns/1ps
+            xmverilog ../testbench/tb_${topmodule}.v -access +rw -mess +gui -dumptiming timingdump.log -timescale 1ns/1ps
         fi
 	# if gui
     else
-    if [ $cells == 1 ]
+    if [ $cells == 1 ] || [ $layout == 1 ]
         then
         xmverilog ../testbench/tb_${topmodule}.v -access +rw -mess	-sdf_cmd_file ../sdf/sdf.cmd -dumptiming timingdump.log -timescale 1ns/1ps
         else
