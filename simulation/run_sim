@@ -6,7 +6,11 @@ echo "**********Xcelcium Simulation Control File**********"
 
 # Read stdcell_verilog variable from ../lib/lib_path file
 stdcell_verilog=$(grep '^stdcell_verilog=' ../lib/lib_path | cut -d'=' -f2)
-if [ -z "$stdcell_verilog" ] echo "Error: stdcell_verilog not found in ../lib/lib_path." ; exit 1 ; fi
+if [ -z "$stdcell_verilog" ] 
+then 
+    echo "Error: stdcell_verilog not found in ../lib/lib_path."  
+    exit 1 
+fi
 
 # reset control variables
 clean=0

@@ -8,11 +8,17 @@ echo "Genus Synthesis Control Script"
 target_library=$(grep '^target_library=' ../lib/lib_path | cut -d'=' -f2)
 library_search_path=$(grep '^library_search_path=' ../lib/lib_path | cut -d'=' -f2)
 
-if [ -z "$target_library" ] echo "Error: target_library not found in ../lib/lib_path." ; exit 1 ; fi
-if [ -z "$library_search_path" ] echo "Error: library_search_path not found in ../lib/lib_path." ; exit 1 ; fi
+if [ -z "$target_library" ]; then
+    echo "Error: target_library not found in ../lib/lib_path."
+    exit 1
+fi
+if [ -z "$library_search_path" ]; then
+    echo "Error: library_search_path not found in ../lib/lib_path."
+    exit 1
+fi
 
 echo "target_library: $target_library"
-echo "library_search_path: $target_library_path"
+echo "library_search_path: $library_search_path"
 
 # reset control variables
 gui=0
@@ -45,14 +51,14 @@ if [ $gui == 1 ]
 then
    if [ $top == 1 ]
    then
-      genus -execute "set target_library $target_library; set init_lib_search_path $library_search_path; set top_module $topmodule" -f ../scripts/synthesis.tcl -gui
+      genus -execute "set target_library $target_library; set_db init_lib_search_path $library_search_path; set top_module $topmodule" -f ../scripts/synthesis.tcl -gui
    else
       genus -gui
    fi
 else
    if [ $top == 1 ]
    then
-      genus -execute "set target_library $target_library; set init_lib_search_path $library_search_path; set top_module $topmodulee" -f ../scripts/synthesis.tcl 
+      genus -execute "set target_library $target_library; set_db init_lib_search_path $library_search_path; set top_module $topmodule" -f ../scripts/synthesis.tcl 
    else
       genus
    fi

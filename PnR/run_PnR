@@ -11,12 +11,12 @@ cap_table=$(grep '^cap_table=' ../lib/lib_path | cut -d'=' -f2)
 clockBufName=$(grep '^clockBufName=' ../lib/lib_path | cut -d'=' -f2)
 fillerCells=$(grep '^fillerCells=' ../lib/lib_path | cut -d'=' -f2)
 lef=$(grep '^lef=' ../lib/lib_path | cut -d'=' -f2)
-if [ -z "$target_library" ] echo "Error: target_library not found in ../lib/lib_path." ; exit 1 ; fi
-if [ -z "$library_search_path" ] echo "Error: library_search_path not found in ../lib/lib_path." ; exit 1 ; fi
-if [ -z "$cap_table" ] echo "Error: cap_table not found in ../lib/lib_path." ; exit 1; fi
-if [ -z "$clockBufName" ] echo "Error: clockBufName not found in ../lib/lib_path." ; exit 1; fi
-if [ -z "$fillerCells" ] echo "Error: fillerCells not found in ../lib/lib_path." ; exit 1; fi
-if [ -z "$lef" ] echo "Error: lef not found in ../lib/lib_path." ; exit 1; fi
+if [ -z "$target_library" ]; then echo "Error: target_library not found in ../lib/lib_path." ; exit 1 ; fi
+if [ -z "$library_search_path" ]; then echo "Error: library_search_path not found in ../lib/lib_path." ; exit 1 ; fi
+if [ -z "$cap_table" ]; then echo "Error: cap_table not found in ../lib/lib_path." ; exit 1; fi
+if [ -z "$clockBufName" ]; then echo "Error: clockBufName not found in ../lib/lib_path." ; exit 1; fi
+if [ -z "$fillerCells" ]; then echo "Error: fillerCells not found in ../lib/lib_path." ; exit 1; fi
+if [ -z "$lef" ]; then echo "Error: lef not found in ../lib/lib_path." ; exit 1; fi
 
 # reset control variables
 gui=0
