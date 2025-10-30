@@ -1,0 +1,5 @@
+topmodule=$1
+echo "COMPILED_SDF_FILE = \"../../PnR/work/output/${topmodule}_pnr.sdf.X\",
+SCOPE = tb_${topmodule}.DUT_${topmodule},
+MTM_CONTROL = \"MAXIMUM\",
+LOG_FILE = \"${topmodule}_pnr_sdf.log\";" > ../sdf/sdf.cmd

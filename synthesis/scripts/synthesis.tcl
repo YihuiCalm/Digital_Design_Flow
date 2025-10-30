@@ -27,9 +27,9 @@ syn_generic
 syn_map
 syn_opt
 
-report timing > report/timing.rep
-report gates  > report/cell.rep
-report power  > report/power.rep
+report timing > report/${top_module}_timing.rep
+report gates  > report/${top_module}_cell.rep
+report power  > report/${top_module}_power.rep
 
 write_netlist -mapped >  output/${top_module}_syn.v
 write_netlist -pg -mapped >  output/${top_module}_pg_syn.v
