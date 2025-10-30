@@ -6,7 +6,7 @@ set_db cmd_file log/genus.cmd
 set_db init_hdl_search_path {../../source} 
 # top_module is defined in the command line with -execute "set top_module <module_name>"
 
-read_libs ${target_library}.lib
+read_libs ${target_library}
 # check_library -lib_cell [get_lib_cells]
 
 read_hdl [glob ../../source/*v]
